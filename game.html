@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Bouncing Balls Game</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Arial Black', Gadget, sans-serif;
+            background-color: #0077b6;
+            background-image: radial-gradient(#006494 15%, transparent 16%), radial-gradient(#006494 15%, transparent 16%);
+            background-position: 0 0, 30px 30px;
+            background-size: 60px 60px;
+            height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 220px;
+            background-color: transparent;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar h2 {
+            font-size: 48px;
+            margin: 0;
+        }
+
+        .sidebar #score {
+            font-size: 48px;
+            color: #00ffff;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .sidebar #ballSpeed {
+            font-size: 48px;
+            color: #00ffff;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .sidebar #stage {
+            font-size: 48px;
+            color: #00ffff;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .sidebar .icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 30px 0;
+            font-size: 48px;
+        }
+
+        .sidebar .boost {
+            margin-top: auto;
+            text-align: center;
+            background-color: #1e90ff;
+            padding: 10px;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .boost span {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: red;
+            color: white;
+            font-size: 12px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon {
+            cursor: pointer;
+        }
+
+        .grid {
+            width: 1660px;
+            height: 900px;
+            background-color: #001d3d;
+            margin: 20px;
+            border-radius: 20px;
+            padding: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pause-overlay,
+        .gameover-overlay,
+        .leaderboard-overlay,
+        .win-overlay
+        {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 100px;
+            font-weight: bold;
+            border-radius: 20px;
+            z-index: 10;
+            flex-direction: column;
+        }
+        #overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 100px;
+            font-weight: bold;
+            border-radius: 20px;
+            z-index: 10;
+            flex-direction: column;
+            display: flex;
+        }
+        .win-overlay {
+            font-size: 100px;
+            text-align: center;
+        }
+        .gameover-overlay {
+            color: #ff6347; /* Change this to any color you prefer */
+        }
+        .gameover-overlay button,
+        .leaderboard-overlay button,
+        .win-overlay button {
+            margin: 40px 10px 0 10px;
+            padding: 10px 20px;
+            font-size: 60px;
+            border: none;
+            border-radius: 8px;
+            background-color: #00b4d8;
+            color: white;
+            cursor: pointer;
+        }
+
+        /*.leaderboard-overlay ul {*/
+        /*    list-style: none;*/
+        /*    padding: 0;*/
+        /*    font-size: 24px;*/
+        /*}*/
+
+        /*.leaderboard-overlay li {*/
+        /*    margin: 5px 0;*/
+        /*}*/
+
+
+        .leaderboard {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            width: 480px;
+        }
+
+        .leaderboard li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .leaderboard li:last-child {
+            border-bottom: none;
+        }
+
+
+        button.btn-restart {
+            background-color: #28a745; /* Green */
+        }
+
+        button.btn-leaderboard {
+            background-color: #ffc107; /* Yellow */
+        }
+        .name {
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .score {
+            font-weight: bold;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+        .top1 { background-color: gold; color: black; font-weight: bold; }
+        .top2 { background-color: silver; color: black; font-weight: bold; }
+        .top3 { background-color: #cd7f32; color: black; font-weight: bold; }
+        .block {
+            position: absolute;
+            width: 100px;
+            height: 20px;
+            background-color: blue;
+        }
+
+        .user {
+            position: absolute;
+            width: 200px;
+            height: 20px;
+            background-color: yellow;
+        }
+
+        .ball {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: red;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<script>
+    // Immediately set the sound icon based on localStorage
+    document.addEventListener("DOMContentLoaded", () => {
+        const isMuted = localStorage.getItem("isMuted") === "true";
+        const soundToggle = document.getElementById("soundToggle");
+        if (soundToggle) {
+            soundToggle.textContent = isMuted ? "🔇" : "🔊";
+        }
+    });
+</script>
+
+<body>
+<div class="sidebar">
+    <div>
+        <h2>Score</h2>
+        <div id="score">0</div>
+        <h2>Speed</h2>
+        <div id="ballSpeed">0</div>
+        <h2>Stage</h2>
+        <div id="stage">1</div>
+    </div>
+    <div>
+        <!--    <div class="icon">❓</div>-->
+        <div class="icon" id="pauseButton">▐▐&nbsp;</div>
+        <div class="icon" id="soundToggle">🔊</div>
+
+    </div>
+    <div class="boost">
+        <!--    <span>0</span>-->
+        <!--    <div>⚡<br>BOOST</div>-->
+    </div>
+</div>
+
+<div class="grid">
+    <div class="pause-overlay" id="pauseOverlay">Game Paused</div>
+    <div class="gameover-overlay" id="gameOverOverlay">
+        <div>Game Over</div>
+        <button class="btn-restart" onclick="restartGame()">Restart</button>
+        <button class="btn-leaderboard" onclick="showLeaderboard()">Leaderboard</button>
+    </div>
+    <div class="leaderboard-overlay" id="leaderboardOverlay">
+        <div>Leaderboard</div>
+        <ul class="leaderboard" id="leaderboardList"></ul>
+        <button class="btn-restart" onclick="restartGame()">Restart</button>
+    </div>
+    <div class="win-overlay" id="winOverlay">
+<!--        <div>Stage Cleared!</div>-->
+        <div id="winMessage" class="message"></div>
+<!--        <button class="btn-restart" onclick="restartGame()">Restart</button>-->
+<!--        <button class="btn-leaderboard" onclick="showLeaderboard()">Leaderboard</button>-->
+    </div>
+    <div id="overlay">
+        <h2 id="startText">Hit SPACE to start</h2>
+        <h1 id="countdown" style="display:none;"></h1>
+    </div>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+</div>
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Instructions</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial Black', Gadget, sans-serif;
+      background-color: #0077b6;
+      background-image: radial-gradient(#006494 15%, transparent 16%), radial-gradient(#006494 15%, transparent 16%);
+      background-position: 0 0, 30px 30px;
+      background-size: 60px 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: #fff;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    h1 {
+      font-size: 42px;
+      color: #ffffff;
+      text-shadow: 2px 2px 0 #000;
+      margin-bottom: 30px;
+    }
+
+    p {
+      font-size: 18px;
+      margin: 10px 0;
+      text-shadow: 1px 1px 0 #000;
+    }
+
+    .button {
+      font-size: 24px;
+      padding: 10px 20px;
+      margin-top: 30px;
+      border: none;
+      cursor: pointer;
+      background-color: #ffd60a;
+      color: #900c3f;
+      border-radius: 5px;
+      text-shadow: 2px 2px 0 #000;
+    }
+
+    .button:hover {
+      background-color: #ffa500;
+    }
+  </style>
+</head>
+<body>
+<h1>Instructions</h1>
+<p>Destroy the blocks by naviagting the ball. You must clear all the balls in order to proceed.</p>
+<p>Move your arrow around to controll the board</p>
+<button class="button" onclick="startGame()">START</button>
+
+<script>
+  function startGame() {
+    window.location.href = 'game.html';
+  }
+</script>
+</body>
+</html>
